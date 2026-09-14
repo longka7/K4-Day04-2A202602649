@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import time
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -259,18 +260,38 @@ def print_table(results: list[dict[str, Any]], summary: dict[str, Any]) -> None:
         print(f"{key}: {value}")
 
 
+def retry_after_seconds(error: Exception) -> float | None:
+    """Return the provider's requested retry delay for quota errors, if supplied."""
+    message = str(error)
+    if "429" not in message and "RESOURCE_EXHAUSTED" not in message:
+        return None
+    match = re.search(r"retry(?:Delay| in)?[^0-9]*(\d+(?:\.\d+)?)s", message, flags=re.IGNORECASE)
+    return float(match.group(1)) if match else 60.0
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run IT Helpdesk Agent live evals.")
     parser.add_argument("--phase", choices=["B"], default="B")
     parser.add_argument("--suite", choices=["base", "group", "cross", "extension", "adversarial"], default="base", help="Run label saved to JSON; does not filter --eval-cases.")
     parser.add_argument("--version", required=True)
-    parser.add_argument("--provider", choices=["openai", "openrouter", "anthropic", "gemini"], required=True)
+    parser.add_argument("--provider", choices=["openai", "openrouter", "anthropic", "gemini", "ollama"], required=True)
     parser.add_argument("--model", default=None)
     parser.add_argument("--system-prompt", type=Path, default=ARTIFACTS_DIR / "system_prompt.md")
     parser.add_argument("--tools", type=Path, default=ARTIFACTS_DIR / "tools.yaml")
     parser.add_argument("--eval-cases", type=Path, default=DATA_DIR / "eval_base.json")
     parser.add_argument("--runs-dir", type=Path, default=ROOT / "runs")
+    parser.add_argument(
+        "--request-interval-seconds",
+        type=float,
+        default=None,
+        help="Minimum delay between model requests. Defaults to 16 seconds for Gemini free-tier safety.",
+    )
+    parser.add_argument("--max-quota-retries", type=int, default=3, help="Retries for provider 429 quota responses.")
     args = parser.parse_args()
+
+    request_interval = args.request_interval_seconds
+    if request_interval is None:
+        request_interval = 16.0 if args.provider == "gemini" else 0.0
 
     system_prompt = args.system_prompt.read_text(encoding="utf-8")
     artifact_version = build_artifact_version(args.version, args.system_prompt, args.tools)
@@ -286,12 +307,30 @@ def main() -> None:
     openai_tools = to_openai_tools(tool_declarations)
 
     results: list[dict[str, Any]] = []
+    previous_request_started_at: float | None = None
     for case in cases:
         print(f"Running {case['id']}...", flush=True)
         agent = HelpdeskAgent(provider, system_prompt=system_prompt, tools=openai_tools, model=args.model)
         try:
+            if previous_request_started_at is not None and request_interval > 0:
+                elapsed = time.monotonic() - previous_request_started_at
+                if elapsed < request_interval:
+                    time.sleep(request_interval - elapsed)
             tool_choice = None if case["expect"].get("no_tool") else "required"
-            run = agent.run(case_messages(case), tool_choice=tool_choice)
+            quota_attempt = 0
+            while True:
+                previous_request_started_at = time.monotonic()
+                try:
+                    run = agent.run(case_messages(case), tool_choice=tool_choice)
+                    break
+                except Exception as exc:
+                    retry_after = retry_after_seconds(exc)
+                    if retry_after is None or quota_attempt >= args.max_quota_retries:
+                        raise
+                    quota_attempt += 1
+                    wait_seconds = max(retry_after + 2.0, request_interval)
+                    print(f"Quota limited; retrying {case['id']} in {wait_seconds:.1f}s ({quota_attempt}/{args.max_quota_retries})...", flush=True)
+                    time.sleep(wait_seconds)
             calls = [{"name": call.name, "args": call.args} for call in run.tool_calls]
             result = evaluate_phase_b(case, calls, run.text)
             tool_results = run.tool_results

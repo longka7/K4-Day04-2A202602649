@@ -8,14 +8,14 @@
 tools:
   # ---------------- Core tools ----------------
   - name: clarify
-    description: "Gửi một câu hỏi cho người dùng."
+    description: "Dừng workflow để hỏi thông tin còn thiếu, làm rõ enum mơ hồ, hoặc xin xác nhận trước action. Luôn đặt response_type: text cho mã asset/employee, yes_no cho xác nhận, choice kèm options cho lựa chọn enum. Khi review payload ticket, question phải nêu summary, priority và asset_id cuối cùng rồi hỏi xác nhận yes/no. Không gọi data/action tool trước khi clarify được trả lời."
     parameters:
       type: object
       properties:
         question: {type: string, default: "", description: "Câu hỏi"}
         response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "Kiểu trả lời"}
         options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn"}
-      required: [question]
+      required: [question, response_type]
 
   - name: search_kb
     description: "Tìm hướng dẫn hỗ trợ kỹ thuật."
@@ -28,7 +28,7 @@ tools:
       required: [query]
 
   - name: check_service_status
-    description: "Kiểm tra trạng thái một dịch vụ."
+    description: "Kiểm tra trạng thái shared service theo service và environment. environment chỉ nhận production hoặc staging; không truyền demo, QA, test, sandbox hoặc UAT và không tự map chúng. Nếu người dùng nêu môi trường khác hoặc mơ hồ, gọi clarify(response_type=choice, options=[production, staging]) trước. Tool này không chẩn đoán một thiết bị riêng lẻ."
     parameters:
       type: object
       properties:
@@ -37,7 +37,7 @@ tools:
       required: [service]
 
   - name: inspect_device
-    description: "Kiểm tra thông tin và chẩn đoán thiết bị."
+    description: "Đọc snapshot của đúng một asset ID đã được người dùng nêu. check phải là đúng một enum: vpn cho vấn đề VPN, network cho Wi-Fi/kết nối, security cho bảo mật, hardware/software khi được nêu; all chỉ dùng khi người dùng yêu cầu kiểm tra tổng thể. Không đoán asset ID và không gộp nhiều check vào một string."
     parameters:
       type: object
       properties:
@@ -96,7 +96,7 @@ tools:
       required: [query]
 
   - name: create_ticket
-    description: "Tạo một ticket hỗ trợ."
+    description: "Ghi một ticket local. Chỉ gọi sau khi người dùng trả lời xác nhận rõ ràng cho đúng summary, priority và asset_id cuối cùng. confirmed phải là Boolean true thực sự. Không gọi tool này để hỏi hoặc kiểm tra xác nhận; hãy dùng clarify(response_type=yes_no) trước."
     parameters:
       type: object
       properties:
@@ -104,4 +104,4 @@ tools:
         priority: {type: string, enum: [low, medium, high, critical], default: "medium", description: "Mức ưu tiên"}
         asset_id: {type: string, default: "", description: "Mã tài sản nếu có"}
         confirmed: {type: boolean, default: false, description: "Đã được người dùng xác nhận"}
-      required: [summary]
+      required: [summary, priority, confirmed]

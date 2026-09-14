@@ -15,11 +15,11 @@ class OpenAIProvider:
         *,
         api_key_env: str = "OPENAI_API_KEY",
         base_url: str | None = None,
-        default_model: str = "gpt-4o-mini",
+        default_model: str | None = None,
     ) -> None:
         self.api_key_env = api_key_env
         self.base_url = base_url
-        self.default_model = default_model
+        self.default_model = default_model or os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 
     def complete(
         self,
@@ -39,11 +39,16 @@ class OpenAIProvider:
         if not api_key:
             raise RuntimeError(f"Missing API key env var: {self.api_key_env}")
 
-        client = OpenAI(api_key=api_key, base_url=self.base_url)
+        # An OpenAI-compatible gateway can be configured without changing code.
+        # Keep the official OpenAI endpoint as the default when no override exists.
+        base_url = self.base_url or os.getenv("OPENAI_BASE_URL") or None
+        timeout_seconds = float(os.getenv("OPENAI_TIMEOUT_SECONDS", "45"))
+        client = OpenAI(api_key=api_key, base_url=base_url, timeout=timeout_seconds, max_retries=0)
         kwargs: dict[str, Any] = {
             "model": model or self.default_model,
             "messages": messages,
             "temperature": temperature,
+            "max_tokens": int(os.getenv("OPENAI_MAX_TOKENS", "1024")),
         }
         if tools:
             kwargs["tools"] = tools

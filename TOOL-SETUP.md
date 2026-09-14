@@ -52,6 +52,7 @@ ANTHROPIC_API_KEY=...
 
 # Hoặc Gemini
 GEMINI_API_KEY=...
+GEMINI_MODEL=gemini-3.5-flash
 ```
 
 Chạy preflight với đúng provider:
