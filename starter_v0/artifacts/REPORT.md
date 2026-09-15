@@ -174,13 +174,13 @@ commit evidence của bất kỳ thành viên nào còn thiếu.
 ### Nguyễn Long Khánh — 2A202602649
 
 - **Vai trò/phần việc được nhận:** Nhóm trưởng, Prompt Engineering (A)
-- **Những gì tôi đã thay đổi trong repo chung:** `system_prompt.md` v1–v6, `version_log.csv`, fix retry/timeout cho `providers/openai_provider.py` và `providers/gemini_provider.py`, merge toàn bộ branch của B/C/D/E vào `main`
-- **File hoặc artifact liên quan:** `artifacts/system_prompt.md`, `artifacts/version_log.csv`, `runs/v0-v6_B_base_gemini_*.json`, `runs/v5-v6_B_adversarial_gemini_*.json`
-- **Commit hash hoặc pull request:** _điền hash commit thật của bạn_
-- **Một quyết định kỹ thuật tôi đã đưa ra và lý do:** _bạn tự điền_
-- **Khó khăn tôi gặp và cách tôi xử lý:** _bạn tự điền_
-- **Điều tôi học được từ phần việc này:** _bạn tự điền_
-- **Nếu làm lại, tôi sẽ cải thiện điều gì:** _bạn tự điền_
+- **Những gì tôi đã thay đổi trong repo chung:** Thiết kế `system_prompt.md` qua 6 vòng (v1–v6), mỗi vòng có hypothesis riêng và kiểm tra regression trước khi giữ lại; điều phối và merge toàn bộ branch của B/C/D/E vào `main`; phát hiện và vá lỗi hạ tầng phát sinh trong lúc chạy eval (thêm retry/timeout cho `providers/openai_provider.py` và `providers/gemini_provider.py` khi NVIDIA/Gemini free tier bị rate-limit/treo).
+- **File hoặc artifact liên quan:** `artifacts/system_prompt.md`, `artifacts/version_log.csv`, `runs/v0-v6_B_base_gemini_*.json`, `runs/v5-v6_B_adversarial_gemini_*.json`, `providers/openai_provider.py`, `providers/gemini_provider.py`
+- **Commit hash hoặc pull request:** `a075906` (hoàn thành v0-v4), `f4bf404` (v5-v6 chống adversarial), `afad2af`/`ea301f8`/`674710d`/`2cbdeab` (merge B/C/E/D)
+- **Một quyết định kỹ thuật tôi đã đưa ra và lý do:** Sau khi phát hiện v2 (chạy trên NVIDIA free) và v0 baseline lại chạy trên model khác nhau khiến so sánh không còn ý nghĩa, tôi quyết định chạy lại toàn bộ chuỗi v0-v6 trên cùng 1 model (`gemini-3.5-flash-lite`) thay vì giữ số liệu cũ — chấp nhận tốn thêm thời gian để đổi lấy version_log có thể so sánh khoa học được, đúng tinh thần LAB-GUIDE (không đổi nhiều biến cùng lúc).
+- **Khó khăn tôi gặp và cách tôi xử lý:** Cả 3 provider free (OpenRouter, NVIDIA, Gemini) đều gặp sự cố khác nhau (hết quota ngày, tụt hiệu năng dần, giới hạn 5 request/phút) trong lúc chạy 30+ eval run. Tôi xử lý bằng cách thêm retry-with-backoff tôn trọng response của server, và khi 1 model quá chậm thì chuyển hẳn sang `gemini-3.5-flash-lite` (quota cao hơn) thay vì cố chờ.
+- **Điều tôi học được từ phần việc này:** Một prompt fix có thể có tác dụng phụ ở tham số hoàn toàn không liên quan (VD rule "không đoán ID" ở v2 lại làm model chọn nhầm `check=all` thay vì `vpn`) — luôn cần chạy lại full suite và diff tập case PASS/FAIL, không chỉ nhìn % tổng.
+- **Nếu làm lại, tôi sẽ cải thiện điều gì:** Xác nhận trước với B/C/E về provider/model dùng chung ngay từ đầu, tránh tình trạng mỗi người tự baseline trên 1 model khác nhau rồi phải hợp nhất lại `version_log.csv` sau.
 
 ### Dương Dương — 2A202602498
 
