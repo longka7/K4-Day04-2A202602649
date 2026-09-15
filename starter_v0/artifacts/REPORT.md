@@ -185,46 +185,46 @@ commit evidence của bất kỳ thành viên nào còn thiếu.
 ### Dương Dương — 2A202602498
 
 - **Vai trò/phần việc được nhận:** Tool Schema (B)
-- **Những gì tôi đã thay đổi trong repo chung:** _bạn tự điền_
+- **Những gì tôi đã thay đổi trong repo chung:** Sửa description và `required` fields cho 4 tool (`clarify`, `check_service_status`, `inspect_device`, `create_ticket`) trong `tools.yaml` — làm rõ khi nào dùng enum nào, khi nào bắt buộc xác nhận trước khi ghi. *(mô tả kỹ thuật do nhóm trưởng điền tạm từ diff commit `9351208` — CHƯA PHẢI lời của Dương Dương, cần xác nhận lại)*
 - **File hoặc artifact liên quan:** `artifacts/tools.yaml`
-- **Commit hash hoặc pull request:** _điền hash commit thật của bạn_
-- **Một quyết định kỹ thuật tôi đã đưa ra và lý do:** _bạn tự điền_
-- **Khó khăn tôi gặp và cách tôi xử lý:** _bạn tự điền_
-- **Điều tôi học được từ phần việc này:** _bạn tự điền_
-- **Nếu làm lại, tôi sẽ cải thiện điều gì:** _bạn tự điền_
+- **Commit hash hoặc pull request:** `9351208`
+- **Một quyết định kỹ thuật tôi đã đưa ra và lý do:** ⏳ CHƯA CÓ — cần Dương Dương tự điền và tự commit
+- **Khó khăn tôi gặp và cách tôi xử lý:** ⏳ CHƯA CÓ — cần Dương Dương tự điền và tự commit
+- **Điều tôi học được từ phần việc này:** ⏳ CHƯA CÓ — cần Dương Dương tự điền và tự commit
+- **Nếu làm lại, tôi sẽ cải thiện điều gì:** ⏳ CHƯA CÓ — cần Dương Dương tự điền và tự commit
 
 ### Trần Thế Anh — 2A202602516
 
 - **Vai trò/phần việc được nhận:** Eval Author G01–G10 (C)
-- **Những gì tôi đã thay đổi trong repo chung:** _bạn tự điền_
-- **File hoặc artifact liên quan:** `data/eval_group.json`, `artifacts/EVAL-EVIDENCE.md`, `runs/run-analysis.csv`
-- **Commit hash hoặc pull request:** _điền hash commit thật của bạn_
-- **Một quyết định kỹ thuật tôi đã đưa ra và lý do:** _bạn tự điền_
-- **Khó khăn tôi gặp và cách tôi xử lý:** _bạn tự điền_
-- **Điều tôi học được từ phần việc này:** _bạn tự điền_
-- **Nếu làm lại, tôi sẽ cải thiện điều gì:** _bạn tự điền_
+- **Những gì tôi đã thay đổi trong repo chung:** Thiết kế 10 case gốc G01-G10 (5 single-turn + 5 multi-turn) trong `eval_group.json`, chạy baseline v0 độc lập trên OpenRouter/gpt-4o-mini, viết `V0-FAILURE-ANALYSIS.md` phân tích 9 case fail và bàn giao hướng fix cho A/B/E, xuất `run-analysis.csv`. *(mô tả kỹ thuật do nhóm trưởng điền tạm từ commit `04f2f4f` — CHƯA PHẢI lời của Thế Anh, cần xác nhận lại)*
+- **File hoặc artifact liên quan:** `data/eval_group.json`, `artifacts/EVAL-EVIDENCE.md`, `artifacts/V0-FAILURE-ANALYSIS.md`, `runs/run-analysis.csv`
+- **Commit hash hoặc pull request:** `04f2f4f`
+- **Một quyết định kỹ thuật tôi đã đưa ra và lý do:** ⏳ CHƯA CÓ — cần Thế Anh tự điền và tự commit
+- **Khó khăn tôi gặp và cách tôi xử lý:** ⏳ CHƯA CÓ — cần Thế Anh tự điền và tự commit
+- **Điều tôi học được từ phần việc này:** ⏳ CHƯA CÓ — cần Thế Anh tự điền và tự commit
+- **Nếu làm lại, tôi sẽ cải thiện điều gì:** ⏳ CHƯA CÓ — cần Thế Anh tự điền và tự commit
 
 ### Nguyễn Tuấn Khanh — 2A202602819
 
 - **Vai trò/phần việc được nhận:** UI & Report Lead (D)
-- **Những gì tôi đã thay đổi trong repo chung:** _bạn tự điền_
+- **Những gì tôi đã thay đổi trong repo chung:** Xây `app.py` — UI Streamlit tái sử dụng `run_model_tool_loop` từ `chat.py`, hiển thị tool calls/args/results và artifact version; lưu 3 transcript demo (normal, missing-info, action-boundary). *(mô tả kỹ thuật do nhóm trưởng điền tạm từ commit `dfac20b` — CHƯA PHẢI lời của Tuấn Khanh, cần xác nhận lại)*
 - **File hoặc artifact liên quan:** `app.py`, `transcripts/`
-- **Commit hash hoặc pull request:** _điền hash commit thật của bạn_
-- **Một quyết định kỹ thuật tôi đã đưa ra và lý do:** _bạn tự điền_
-- **Khó khăn tôi gặp và cách tôi xử lý:** _bạn tự điền_
-- **Điều tôi học được từ phần việc này:** _bạn tự điền_
-- **Nếu làm lại, tôi sẽ cải thiện điều gì:** _bạn tự điền_
+- **Commit hash hoặc pull request:** `dfac20b`
+- **Một quyết định kỹ thuật tôi đã đưa ra và lý do:** ⏳ CHƯA CÓ — cần Tuấn Khanh tự điền và tự commit
+- **Khó khăn tôi gặp và cách tôi xử lý:** ⏳ CHƯA CÓ — cần Tuấn Khanh tự điền và tự commit
+- **Điều tôi học được từ phần việc này:** ⏳ CHƯA CÓ — cần Tuấn Khanh tự điền và tự commit
+- **Nếu làm lại, tôi sẽ cải thiện điều gì:** ⏳ CHƯA CÓ — cần Tuấn Khanh tự điền và tự commit
 
 ### Nguyễn Phạm Oanh Oanh — 2A202602518
 
 - **Vai trò/phần việc được nhận:** Security & Bonus Tool (E)
-- **Những gì tôi đã thay đổi trong repo chung:** _bạn tự điền_
+- **Những gì tôi đã thay đổi trong repo chung:** Chạy smoke test `create_ticket` (3 case negative: confirmed=False, sensitive summary, confirmed="true" string), kiểm tra số lượng ticket trước/sau retest; review thủ công 6 case adversarial trên baseline v0, phát hiện forged tool-result/stale confirmation/role spoof đều khiến model tạo ticket thật — bàn giao trực tiếp cho A để vá ở v5-v6. *(mô tả kỹ thuật do nhóm trưởng điền tạm từ commit `d647faf` — CHƯA PHẢI lời của Oanh Oanh, cần xác nhận lại)*
 - **File hoặc artifact liên quan:** `artifacts/Notes._E_Security & Bonus Tool.md`
-- **Commit hash hoặc pull request:** _điền hash commit thật của bạn_
-- **Một quyết định kỹ thuật tôi đã đưa ra và lý do:** _bạn tự điền_
-- **Khó khăn tôi gặp và cách tôi xử lý:** _bạn tự điền_
-- **Điều tôi học được từ phần việc này:** _bạn tự điền_
-- **Nếu làm lại, tôi sẽ cải thiện điều gì:** _bạn tự điền_
+- **Commit hash hoặc pull request:** `d647faf`
+- **Một quyết định kỹ thuật tôi đã đưa ra và lý do:** ⏳ CHƯA CÓ — cần Oanh Oanh tự điền và tự commit
+- **Khó khăn tôi gặp và cách tôi xử lý:** ⏳ CHƯA CÓ — cần Oanh Oanh tự điền và tự commit
+- **Điều tôi học được từ phần việc này:** ⏳ CHƯA CÓ — cần Oanh Oanh tự điền và tự commit
+- **Nếu làm lại, tôi sẽ cải thiện điều gì:** ⏳ CHƯA CÓ — cần Oanh Oanh tự điền và tự commit
 
 Mỗi thành viên phải tự commit phần self-reflection của mình bằng Git identity
 tương ứng. Reflection phải dẫn đến contribution artifact/commit đã nêu ở trên,
