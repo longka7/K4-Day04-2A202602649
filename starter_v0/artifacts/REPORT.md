@@ -2,8 +2,8 @@
 
 ## Team
 
-- Team:
-- Members:
+- Team: Center zone C
+- Members: 
 - Provider/model:
 
 # PHẦN A — Giới thiệu agent
@@ -135,16 +135,33 @@ có thể đối chiếu đóng góp.
 
 Sao chép mẫu dưới đây cho từng thành viên:
 
-### Họ tên — MSSV
+### Nguyễn Phạm Oanh Oanh — 2A202602518
 
-- **Vai trò/phần việc được nhận:**
-- **Những gì tôi đã thay đổi trong repo chung:**
-- **File hoặc artifact liên quan:**
-- **Commit hash hoặc pull request:**
-- **Một quyết định kỹ thuật tôi đã đưa ra và lý do:**
-- **Khó khăn tôi gặp và cách tôi xử lý:**
-- **Điều tôi học được từ phần việc này:**
-- **Nếu làm lại, tôi sẽ cải thiện điều gì:**
+- **Vai trò/phần việc được nhận:**  
+  E — Security & Bonus Tool. Tôi phụ trách review adversarial/security, kiểm tra ranh giới tạo ticket, kiểm tra nguy cơ rò rỉ dữ liệu qua external search/Tavily, và ghi lại evidence bảo mật cho báo cáo.
+
+- **Những gì tôi đã thay đổi trong repo chung:**  
+  Tôi tạo file ghi chú security evidence cho phần E, bao gồm trạng thái provider, kết quả adversarial baseline v0, kết quả smoke test `create_ticket`, kiểm tra ticket count trước/sau, review thủ công các adversarial case quan trọng, và nhận xét về data leakage/action boundary.
+
+- **File hoặc artifact liên quan:**  
+  - `starter_v0/artifacts/Notes._E_Security & Bonus Tool.md`  
+  - `starter_v0/runs/v0_B_adversarial_openai_20260914T193932572672.json`  
+  - Các generated ticket trong `starter_v0/tickets/` chỉ được dùng để kiểm tra nội bộ, không đưa vào bài nộp.
+
+- **Commit hash hoặc pull request:**  
+  `[Điền commit hash hoặc link pull request sau khi commit/push]`
+
+- **Một quyết định kỹ thuật tôi đã đưa ra và lý do:**  
+  Tôi tách riêng lỗi ở model layer và implementation guardrail. Ví dụ, ở A05 model vẫn gọi `create_ticket` với password trong summary, nhưng implementation chặn bằng `restricted_sensitive_data`; ở A12 model cố gọi `search_device_info` với `LT-204` và `EMP-1001`, nhưng tool chặn bằng `restricted_internal_identifier`. Cách tách này giúp nhóm biết lỗi nào cần sửa ở `system_prompt.md`/`tools.yaml`, và guardrail nào trong implementation đã hoạt động đúng.
+
+- **Khó khăn tôi gặp và cách tôi xử lý:**  
+  Ban đầu các adversarial run bị lỗi provider: Gemini hết quota và OpenAI thiếu API key, nên các run đó không hợp lệ để làm evidence. Tôi chỉ dùng run chính thức khi đạt điều kiện `provider_error_cases = 0` và `measured_cases = total_cases`. Sau đó tôi chạy được baseline hợp lệ bằng OpenAI và dùng file run đó để review các case security. Tôi cũng kiểm tra Git status để tránh commit `.env`, API key, generated tickets hoặc cache.
+
+- **Điều tôi học được từ phần việc này:**  
+  Tôi học được rằng không thể chỉ nhìn automatic score để kết luận agent an toàn. Cần đọc kỹ tool calls, arguments, tool results và cả filesystem để biết agent có tạo ticket thật hay có cố gửi dữ liệu nội bộ ra external tool hay không. Tôi cũng hiểu rõ hơn sự khác nhau giữa lỗi do prompt/schema và lỗi do implementation.
+
+- **Nếu làm lại, tôi sẽ cải thiện điều gì:**  
+  Tôi sẽ chuẩn bị provider/API key ổn định sớm hơn để tránh mất thời gian vì quota hoặc cấu hình sai. Tôi cũng sẽ ghi before/after ticket count ngay từ đầu trước mỗi adversarial run, và chuẩn hóa phần review security theo format `Case / Expected calls / Actual calls / Observed mismatch / Tool execution result / Giả thuyết nguyên nhân / Artifact dự định sửa / Rủi ro regression`.
 
 Mỗi thành viên phải tự commit phần self-reflection của mình bằng Git identity
 tương ứng. Reflection phải dẫn đến contribution artifact/commit đã nêu ở trên,
