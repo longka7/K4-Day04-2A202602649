@@ -175,7 +175,7 @@ commit evidence của bất kỳ thành viên nào còn thiếu.
 - **Những gì tôi đã thay đổi trong repo chung:** Xây `app.py` — UI Streamlit tái sử dụng `run_model_tool_loop` từ `chat.py`, hiển thị tool calls/args/results và artifact version; lưu 3 transcript demo (normal, missing-info, action-boundary). Tổng hợp prompt hypothesis + prompt changes từ A,schema changes từ B, metrics + runs + eval từ C, adversarial/security + bonus evidence từ E.
 
 - **File hoặc artifact liên quan:** `app.py`, `transcripts/`, `REPORT.md`
-- **Commit hash hoặc pull request:** `6149b89`
+- **Commit hash hoặc pull request:** `466c6d1`
 - **Một quyết định kỹ thuật tôi đã đưa ra và lý do:** Tôi tái sử dụng `run_model_tool_loop` từ `chat.py` thay vì viết một agent loop riêng cho UI, để hành vi trên giao diện thống nhất với CLI/eval và có thể đối chiếu tool trace với run evidence.
 - **Khó khăn tôi gặp và cách tôi xử lý:** Khó khăn chính là hiển thị đầy đủ tool calls, arguments, results/errors và artifact version mà không làm mất luồng hội thoại. Tôi xử lý bằng cách lưu tool events trong session state, render từng trace trong expander và ghi transcript JSON sau mỗi request.
 - **Điều tôi học được từ phần việc này:** Tôi học được rằng UI của agent không chỉ cần trả lời được câu hỏi mà còn phải giúp người dùng kiểm tra agent đã gọi tool nào, với arguments nào và kết quả ra sao; transcript là một phần quan trọng của evidence.
