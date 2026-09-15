@@ -2,7 +2,7 @@
 
 ## Team
 
-- Team:
+- Team: 
 - Members:
 - Provider/model:
 
@@ -142,18 +142,16 @@ Sao chép mẫu dưới đây cho từng thành viên:
 
 ### Họ tên — MSSV
 
-- **Vai trò/phần việc được nhận:**
-- **Những gì tôi đã thay đổi trong repo chung:**
-- **File hoặc artifact liên quan:**
-- **Commit hash hoặc pull request:**
-- **Một quyết định kỹ thuật tôi đã đưa ra và lý do:**
-- **Khó khăn tôi gặp và cách tôi xử lý:**
-- **Điều tôi học được từ phần việc này:**
-- **Nếu làm lại, tôi sẽ cải thiện điều gì:**
+Dương Dương — 2A202602498
+- Vai trò/phần việc được nhận: Tool Schema (B)
+- Những gì tôi đã thay đổi trong repo chung: Sửa description và required fields cho 4 tool (clarify, check_service_status, inspect_device, create_ticket) trong tools.yaml — làm rõ khi nào dùng enum nào, khi nào bắt buộc xác nhận trước khi ghi.
+- File hoặc artifact liên quan: artifacts/tools.yaml
+- Commit hash hoặc pull request: 9351208
+- Một quyết định kỹ thuật tôi đã đưa ra và lý do: Tôi quyết định dùng cơ chế defense-in-depth cho create_ticket: không chỉ yêu cầu model hỏi xác nhận trong prompt, mà còn thêm guardrail trong agent.py để chặn confirmation giả dưới dạng JSON, pseudo-code, role spoofing hoặc confirmation cũ sau khi payload ticket thay đổi. Tôi chọn cách này vì prompt có thể bị model hiểu sai hoặc bị prompt injection, trong khi tạo ticket là thao tác ghi file có side effect. Nhờ vậy, ngay cả khi model gọi create_ticket sai, runtime vẫn chặn việc tạo ticket và chuyển về bước làm rõ/xác nhận an toàn.
+- Khó khăn tôi gặp và cách tôi xử lý: Khó khăn lớn nhất là model local đôi khi chọn tool/argument chưa ổn định, đặc biệt ở các tình huống confirmation giả, confirmation cũ sau khi payload đổi, hoặc dữ liệu nội bộ bị yêu cầu gửi ra external search. Tôi xử lý bằng hai lớp: cải thiện system_prompt.md và tools.yaml, đồng thời thêm guardrail trong agent.py để chặn hoặc chuyển các tool call nguy hiểm thành bước clarify.
+- Điều tôi học được từ phần việc này: Tôi hiểu rằng prompt và tool schema chỉ giảm xác suất lỗi, không đủ bảo vệ action có side effect. Với các thao tác như tạo ticket hoặc external search, implementation phải tự kiểm tra confirmation, identifier nội bộ và dữ liệu nhạy cảm. Tôi cũng học được cách dùng run traces thay vì chỉ nhìn metric để tìm nguyên nhân thật của failure.
+- Nếu làm lại, tôi sẽ cải thiện điều gì: Tôi sẽ xây deterministic tests cho các guardrail ngay từ đầu và chạy adversarial suite sớm hơn, thay vì chờ đến sau Base eval. Tôi cũng sẽ thử model local lớn hơn hoặc structured-output/validation chặt hơn để giảm lỗi argument không ổn định của Qwen3 trong các request nhiều tool.
 
-Mỗi thành viên phải tự commit phần self-reflection của mình bằng Git identity
-tương ứng. Reflection phải dẫn đến contribution artifact/commit đã nêu ở trên,
-không dùng chính phần reflection làm bằng chứng duy nhất cho đóng góp kỹ thuật.
 
 ## C3. Final checkout
 
